@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="从 Functor 到 Applicative 再到 Monad 本文是我在学习 Haskell 期间的一点感悟，不一定正确，但希望可以帮助到一些也在学习 Haskell 的小伙伴们。  大多数 Monad 尝试解决的是 副作用 (side effect) 的问题。 在命令式编程中，大多数函数表现的并不像是数学中的函数，因为它们除了接收输入、返回输出之外，还有可能读写全局变量、进行 IO （如 p">
+<meta name="description" content="updated: 2018-01-01 12:00:00 从 Functor 到 Applicative 再到 Monad 本文是我在学习 Haskell 期间的一点感悟，不一定正确，但希望可以帮助到一些也在学习 Haskell 的小伙伴们。  大多数 Monad 尝试解决的是 副作用 (side effect) 的问题。 在命令式编程中，大多数函数表现的并不像是数学中的函数，因为它们除了接收输入">
 <meta name="keywords" content="Haskell, 函数式编程">
 <meta property="og:type" content="article">
 <meta property="og:title" content="从 Functor 到 Applicative 再到 Monad">
 <meta property="og:url" content="http://yoursite.com/2021/02/06/Functor/index.html">
 <meta property="og:site_name" content="Hangary Blog">
-<meta property="og:description" content="从 Functor 到 Applicative 再到 Monad 本文是我在学习 Haskell 期间的一点感悟，不一定正确，但希望可以帮助到一些也在学习 Haskell 的小伙伴们。  大多数 Monad 尝试解决的是 副作用 (side effect) 的问题。 在命令式编程中，大多数函数表现的并不像是数学中的函数，因为它们除了接收输入、返回输出之外，还有可能读写全局变量、进行 IO （如 p">
+<meta property="og:description" content="updated: 2018-01-01 12:00:00 从 Functor 到 Applicative 再到 Monad 本文是我在学习 Haskell 期间的一点感悟，不一定正确，但希望可以帮助到一些也在学习 Haskell 的小伙伴们。  大多数 Monad 尝试解决的是 副作用 (side effect) 的问题。 在命令式编程中，大多数函数表现的并不像是数学中的函数，因为它们除了接收输入">
 <meta property="og:locale" content="zh_Hans">
-<meta property="og:updated_time" content="2020-04-03T20:43:13.896Z">
+<meta property="og:updated_time" content="2020-04-03T21:02:51.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="从 Functor 到 Applicative 再到 Monad">
-<meta name="twitter:description" content="从 Functor 到 Applicative 再到 Monad 本文是我在学习 Haskell 期间的一点感悟，不一定正确，但希望可以帮助到一些也在学习 Haskell 的小伙伴们。  大多数 Monad 尝试解决的是 副作用 (side effect) 的问题。 在命令式编程中，大多数函数表现的并不像是数学中的函数，因为它们除了接收输入、返回输出之外，还有可能读写全局变量、进行 IO （如 p">
+<meta name="twitter:description" content="updated: 2018-01-01 12:00:00 从 Functor 到 Applicative 再到 Monad 本文是我在学习 Haskell 期间的一点感悟，不一定正确，但希望可以帮助到一些也在学习 Haskell 的小伙伴们。  大多数 Monad 尝试解决的是 副作用 (side effect) 的问题。 在命令式编程中，大多数函数表现的并不像是数学中的函数，因为它们除了接收输入">
 
 
 
@@ -288,7 +288,7 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2020-04-03T15:43:13-05:00">
+              <time title="Post modified" itemprop="dateModified" datetime="2020-04-03T16:02:51-05:00">
                 2020-04-03
               </time>
             
@@ -322,7 +322,8 @@
       
 
       
-        <h1 id="从-Functor-到-Applicative-再到-Monad"><a href="#从-Functor-到-Applicative-再到-Monad" class="headerlink" title="从 Functor 到 Applicative 再到 Monad"></a>从 Functor 到 Applicative 再到 Monad</h1><blockquote>
+        <p>updated: 2018-01-01 12:00:00</p>
+<h1 id="从-Functor-到-Applicative-再到-Monad"><a href="#从-Functor-到-Applicative-再到-Monad" class="headerlink" title="从 Functor 到 Applicative 再到 Monad"></a>从 Functor 到 Applicative 再到 Monad</h1><blockquote>
 <p>本文是我在学习 Haskell 期间的一点感悟，不一定正确，但希望可以帮助到一些也在学习 Haskell 的小伙伴们。</p>
 </blockquote>
 <p>大多数 Monad 尝试解决的是 <strong>副作用 (side effect)</strong> 的问题。</p>
