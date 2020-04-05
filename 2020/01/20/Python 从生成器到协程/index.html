@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Hangary Blog">
 <meta property="og:description" content="Python 从生成器到协程在开始之前，首先需要明白一个 Python 重要的概念：全局解释器锁 GIL， 即在同一时刻只能有一条线程正在运行。这一机制使得 Python 多线程程序并不能利用多核 CPU 的优势。所以说 Python 的多线程适用于 I/O 密集型程序，而非计算密集型程序。 但是，如果我们用多线程来处理  I/O 密集型程序，尽管可以避免阻塞，但却也会因为频繁切换线程而带来性能损">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-04-05T08:08:48.734Z">
+<meta property="og:updated_time" content="2020-04-05T18:33:16.623Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Python 从生成器到协程">
 <meta name="twitter:description" content="Python 从生成器到协程在开始之前，首先需要明白一个 Python 重要的概念：全局解释器锁 GIL， 即在同一时刻只能有一条线程正在运行。这一机制使得 Python 多线程程序并不能利用多核 CPU 的优势。所以说 Python 的多线程适用于 I/O 密集型程序，而非计算密集型程序。 但是，如果我们用多线程来处理  I/O 密集型程序，尽管可以避免阻塞，但却也会因为频繁切换线程而带来性能损">
@@ -362,8 +362,8 @@
 <p>举一个需要发出 HTTP Request 并处理 Response 的函数作为例子，其函数逻辑应该如下：</p>
 <ol>
 <li>初始化，随后发出一个 HTTP Request；</li>
-<li>使用 <code>yield</code> 暂停；</li>
-<li>外层逻辑收到 HTTP Response 后，通过 <code>send</code> 返回该 Response 并让该函数继续运行；</li>
+<li>使用 <code>yield</code> 暂停并挂起；</li>
+<li>外层逻辑收到 HTTP Response 后，通过 <code>send</code> 返回该 Response 并唤醒该函数；</li>
 <li>处理 Response 并结束。</li>
 </ol>
 <p>代码大致会是这样：</p>
@@ -371,14 +371,21 @@
 <p>以上其实就是一个协程的案例，我们通过 <code>yield</code> 实现了不同逻辑间的切换，并能跳过阻塞中的 I/O 逻辑而去执行其他逻辑。</p>
 <p>不过实际应用的协程中要远远比这个复杂，其中最重要的两个逻辑在于：</p>
 <ol>
-<li>事件框架：如何记录并维护所有正在运行中的协程？</li>
+<li>事件模型</li>
 <li>唤醒逻辑：什么时候应该唤醒一个暂停中的协程？</li>
 </ol>
 <p>这些内容更为复杂，这里就不再阐述，感兴趣的同学建议看一下这篇博文中给出的例子，非常精简且利于理解：”<a href="https://liam.page/2017/06/30/generator-coroutine-in-python-basic-topics/" target="_blank" rel="noopener">Python 中的黑暗角落（二）：生成器协程的调度问题</a>“。</p>
-<hr>
+<h2 id="第三方库实现的协程"><a href="#第三方库实现的协程" class="headerlink" title="第三方库实现的协程"></a>第三方库实现的协程</h2><p>在 python 的第三方库中，有很多基于生成器实现的协程库，帮助我们简化了协程的管理。最为常用的是  <code>Greenlet</code>、<code>Gevent</code>  这两个库：</p>
+<ul>
+<li><code>Greenlet</code>：简化了多个协程间的切换。一个 <code>greenlet</code> 就是一个协程，通过 <code>switch</code> 来中断当前执行的函数，切换到另一个 <code>greenlet</code>。但 <code>Greenlet</code> 并没有自己的调度机制，所以一般不直接使用。</li>
+<li><code>Gevent</code>：基于 <code>Greenlet</code> 实现，并且实现了一个高效的 event loop 调度循环，从而避免了手动管理协程切换。</li>
+</ul>
+<h2 id="asyncio-实现的协程"><a href="#asyncio-实现的协程" class="headerlink" title="asyncio 实现的协程"></a><code>asyncio</code> 实现的协程</h2><p><code>asyncio</code>是 Python 3.4 中引入的标准库，直接内置了对异步IO的支持。</p>
+<h2 id="Async-Await-异步协程"><a href="#Async-Await-异步协程" class="headerlink" title="Async/Await 异步协程"></a>Async/Await 异步协程</h2><hr>
 <p>参考资料：</p>
 <ol>
 <li><a href="https://liam.page/2017/06/30/understanding-yield-in-python/" target="_blank" rel="noopener">Python 中的黑暗角落</a>：一篇对于 python 生成器与协程机制阐述地很清楚的文章，强烈建议阅读。</li>
+<li><a href="https://zhu327.github.io/2016/06/16/python%E5%8D%8F%E7%A8%8B/" target="_blank" rel="noopener">Python协程</a></li>
 </ol>
 
       
@@ -410,8 +417,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/09/10/Python 与 Flask 中的上下文（下）/" rel="next" title="Python 与 Flask 中的上下文（下）">
-                <i class="fa fa-chevron-left"></i> Python 与 Flask 中的上下文（下）
+              <a href="/2019/10/21/Python `else` 语句整理/" rel="next" title="Python `else` 语句整理">
+                <i class="fa fa-chevron-left"></i> Python `else` 语句整理
               </a>
             
           </div>
@@ -497,7 +504,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -559,7 +566,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Python-从生成器到协程"><span class="nav-number">1.</span> <span class="nav-text">Python 从生成器到协程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#生成器-Generator"><span class="nav-number">1.1.</span> <span class="nav-text">生成器 Generator</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#生成器函数-Generator-Function"><span class="nav-number">1.1.1.</span> <span class="nav-text">生成器函数 Generator Function</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#生成器表达式-Generator-Comprehension"><span class="nav-number">1.1.2.</span> <span class="nav-text">生成器表达式 Generator Comprehension</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用生成器"><span class="nav-number">1.1.3.</span> <span class="nav-text">使用生成器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#生成器实现的协程"><span class="nav-number">1.2.</span> <span class="nav-text">生成器实现的协程</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Python-从生成器到协程"><span class="nav-number">1.</span> <span class="nav-text">Python 从生成器到协程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#生成器-Generator"><span class="nav-number">1.1.</span> <span class="nav-text">生成器 Generator</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#生成器函数-Generator-Function"><span class="nav-number">1.1.1.</span> <span class="nav-text">生成器函数 Generator Function</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#生成器表达式-Generator-Comprehension"><span class="nav-number">1.1.2.</span> <span class="nav-text">生成器表达式 Generator Comprehension</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用生成器"><span class="nav-number">1.1.3.</span> <span class="nav-text">使用生成器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#生成器实现的协程"><span class="nav-number">1.2.</span> <span class="nav-text">生成器实现的协程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第三方库实现的协程"><span class="nav-number">1.3.</span> <span class="nav-text">第三方库实现的协程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#asyncio-实现的协程"><span class="nav-number">1.4.</span> <span class="nav-text">asyncio 实现的协程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Async-Await-异步协程"><span class="nav-number">1.5.</span> <span class="nav-text">Async/Await 异步协程</span></a></li></ol></li></ol></div>
             
 
           </div>
