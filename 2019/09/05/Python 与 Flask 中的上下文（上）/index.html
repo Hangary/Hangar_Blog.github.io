@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Python, Flask,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Python 与 Flask 中的上下文（上）最近在学习 Flask，其中 上下文 Context 是 Flask 中非常重要的一个概念，而这个命名也来源于 Python 的 上下文管理器 Context Manager 机制。所以这里稍微整理一下相关的一些概念。 什么是 上下文 Context在计算机术语中，上下文 Context 是一个很广泛的术语，在不同领域往往有不同的含义。我自己的理解是，">
+<meta name="keywords" content="Python, Flask">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python 与 Flask 中的上下文（上）">
+<meta property="og:url" content="http://yoursite.com/2019/09/05/Python 与 Flask 中的上下文（上）/index.html">
+<meta property="og:site_name" content="Hangary Blog">
+<meta property="og:description" content="Python 与 Flask 中的上下文（上）最近在学习 Flask，其中 上下文 Context 是 Flask 中非常重要的一个概念，而这个命名也来源于 Python 的 上下文管理器 Context Manager 机制。所以这里稍微整理一下相关的一些概念。 什么是 上下文 Context在计算机术语中，上下文 Context 是一个很广泛的术语，在不同领域往往有不同的含义。我自己的理解是，">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-04-05T00:48:38.624Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python 与 Flask 中的上下文（上）">
+<meta name="twitter:description" content="Python 与 Flask 中的上下文（上）最近在学习 Flask，其中 上下文 Context 是 Flask 中非常重要的一个概念，而这个命名也来源于 Python 的 上下文管理器 Context Manager 机制。所以这里稍微整理一下相关的一些概念。 什么是 上下文 Context在计算机术语中，上下文 Context 是一个很广泛的术语，在不同领域往往有不同的含义。我自己的理解是，">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":true,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/09/05/Python 与 Flask 中的上下文（上）/">
+
+
+
+
+
+  <title>Python 与 Flask 中的上下文（上） | Hangary Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hangary Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/05/Python 与 Flask 中的上下文（上）/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Han">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hangary Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Python 与 Flask 中的上下文（上）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-09-05T00:00:00-05:00">
+                2019-09-05
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2020-04-04T19:48:38-05:00">
+                2020-04-04
+              </time>
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Python-与-Flask-中的上下文（上）"><a href="#Python-与-Flask-中的上下文（上）" class="headerlink" title="Python 与 Flask 中的上下文（上）"></a>Python 与 Flask 中的上下文（上）</h1><p>最近在学习 <code>Flask</code>，其中 <strong>上下文 Context</strong> 是 <code>Flask</code> 中非常重要的一个概念，而这个命名也来源于 <code>Python</code> 的 <strong>上下文管理器 Context Manager</strong> 机制。所以这里稍微整理一下相关的一些概念。</p>
+<h2 id="什么是-上下文-Context"><a href="#什么是-上下文-Context" class="headerlink" title="什么是 上下文 Context"></a>什么是 上下文 Context</h2><p>在计算机术语中，<strong>上下文 Context</strong> 是一个很广泛的术语，在不同领域往往有不同的含义。我自己的理解是，在编程中，上下文可以理解为 <strong>环境 environment</strong>。</p>
+<p><code>Flask</code> 中的视图函数往往需要一些对象来运行，如 <code>request</code>, <code>session</code>, <code>current_app</code> 等。我们有两个选择：</p>
+<ol>
+<li><strong>函数参数</strong>：将这些对象作为函数参数，传入视图函数。但这种做法会导致程序缺乏可拓展性，我们很难增加新的参数和逻辑。</li>
+<li><strong>函数上下文</strong>：将这些对象作为全局变量，这样调用视图函数时，视图函数就会自动在当前的全局空间搜索。这也是 <code>Flask</code> 的做法。</li>
+</ol>
+<p>但方法 2 也会带来两个问题：</p>
+<ol>
+<li>如何管理这些上下文。</li>
+<li>如何在不同的线程中隔离不同的上下文，既然上下文是全局变量。</li>
+</ol>
+<p>而 <strong>上下文管理器 Context Manager</strong> 解决的就是第一个问题，它负责创建、绑定并在使用后释放 这些 <strong>上下文 Context</strong>。</p>
+<h2 id="Python-中的上下文管理器"><a href="#Python-中的上下文管理器" class="headerlink" title="Python 中的上下文管理器"></a>Python 中的上下文管理器</h2><p>当我们的代码逻辑中出现如下的模式时，<code>Python</code> 的上下文管理器可以帮助我们解耦：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 原代码</span></span><br><span class="line">context_var = enter_func() <span class="comment"># enter logic</span></span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">  ... <span class="comment"># main logic</span></span><br><span class="line">catch:</span><br><span class="line"> 	... <span class="comment"># exception logic</span></span><br><span class="line"><span class="keyword">finally</span>:</span><br><span class="line">  ... <span class="comment"># exit logic</span></span><br><span class="line"></span><br><span class="line">  </span><br><span class="line"><span class="comment"># 使用上下文管理器改写后</span></span><br><span class="line"><span class="keyword">with</span> context_mangaer() <span class="keyword">as</span> context_var:</span><br><span class="line">  ... <span class="comment"># main logic</span></span><br></pre></td></tr></table></figure>
+<p>Python 中上下文管理器的主要作用有两个：</p>
+<ol>
+<li>操作（创建、释放）<strong>资源</strong>，如文件或数据库资源</li>
+<li>捕获并处理<strong>异常</strong></li>
+</ol>
+<h3 id="关键词-with"><a href="#关键词-with" class="headerlink" title="关键词 with"></a>关键词 <code>with</code></h3><p><code>Python</code> 中的上下文机制是通过关键词 <code>with</code> 实现的：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> EXPR:</span><br><span class="line">    BLOCK</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 我们也可以绑定 contextor 的返回值</span></span><br><span class="line"><span class="keyword">with</span> EXPR <span class="keyword">as</span> VAR:</span><br><span class="line">    BLOCK</span><br><span class="line"></span><br><span class="line"><span class="comment"># 也可以绑定多个</span></span><br><span class="line"><span class="keyword">with</span> EXPR1 <span class="keyword">as</span> VAR1, EXPR2 <span class="keyword">as</span> VAR2, ...:</span><br><span class="line">    BLOCK</span><br></pre></td></tr></table></figure>
+<p>执行时的逻辑如下：</p>
+<ol>
+<li>赋值 <code>EXPR</code>， 会返回一个 <strong>上下文管理器 Context Manager</strong>  <code>contextor</code></li>
+<li>调用这个 <code>contextor</code> 的 <code>__enter__</code> 方法，并将返回值赋值给 <code>VAR</code> （如果有 <code>as VAR</code>）</li>
+<li>执行 <code>BLOCK</code></li>
+<li>调用 <code>contextor</code> 的 <code>__exit__</code> 方法</li>
+</ol>
+<h3 id="上下文管理器类-Context-Manager-Class"><a href="#上下文管理器类-Context-Manager-Class" class="headerlink" title="上下文管理器类 (Context Manager Class)"></a>上下文管理器类 (Context Manager Class)</h3><p>在 <code>Python</code> 中要定义一个上下文管理器其实很简单，只要一个类实现了如下两个方法即可：</p>
+<ol>
+<li><code>__enter__(self) -&gt; object</code>: <ul>
+<li>返回值会被绑定在 <code>VAR</code> 上，一般是这个上下文管理器本身，或者是一个资源对象（如 <code>handle</code>）</li>
+</ul>
+</li>
+<li><code>__exit__(self, exception_type, exception_valve, traceback) -&gt; bool</code>: <ul>
+<li>当发生异常时，三个参数会被传入异常的相关信息，否则为 <code>None</code>。</li>
+<li>返回值为 <code>True</code>，表明异常被处理。</li>
+<li>如果返回值不为 <code>True</code> （即便返回了 <code>None</code>），那么这个异常将会被 <code>with</code> 语句抛出，由更上一层处理。</li>
+</ul>
+</li>
+</ol>
+<h3 id="contextmanager-装饰器"><a href="#contextmanager-装饰器" class="headerlink" title="@contextmanager 装饰器"></a><code>@contextmanager</code> 装饰器</h3><p>上面提到的上下文管理器方法，往往是用于给一个资源类增加管理上下文的功能。如果我们只需要 <code>__enter__</code> 和 <code>__exit__</code> 这两个方法，写一个类太过繁杂了。我们可以通过 <code>Python</code> 提供的 <code>@contextmanager</code>  装饰器，来将一个 <strong>生成器 generator</strong> 转化为上下文管理器。</p>
+<p>下面就是一个案例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> contextlib <span class="keyword">import</span> contextmanager</span><br><span class="line"></span><br><span class="line"><span class="comment"># 不处理 Excpetion</span></span><br><span class="line"><span class="meta">@contextmanager</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">open_func_without_excp</span><span class="params">(file_name)</span>:</span></span><br><span class="line">    <span class="comment"># __enter__</span></span><br><span class="line">    file_handler = open(file_name, <span class="string">'r'</span>)</span><br><span class="line">		<span class="comment"># yield 资源对象</span></span><br><span class="line">    <span class="keyword">yield</span> file_handler</span><br><span class="line">    <span class="comment"># __exit__</span></span><br><span class="line">    file_handler.close()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 处理 Excpetion</span></span><br><span class="line"><span class="meta">@contextmanager</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">open_func</span><span class="params">(file_name)</span>:</span></span><br><span class="line">    <span class="comment"># __enter__</span></span><br><span class="line">    file_handler = open(file_name, <span class="string">'r'</span>)</span><br><span class="line">	</span><br><span class="line">    <span class="keyword">try</span>: 	</span><br><span class="line">        <span class="keyword">yield</span> file_handler	<span class="comment"># yield 资源对象</span></span><br><span class="line">    <span class="comment"># exception handler</span></span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> exc:</span><br><span class="line">        print(<span class="string">'the exception was thrown'</span>)</span><br><span class="line">    <span class="comment"># __exit__</span></span><br><span class="line">    file_handler.close()</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> open_func(<span class="string">'test.txt'</span>) <span class="keyword">as</span> file_in:</span><br><span class="line">    <span class="keyword">for</span> line <span class="keyword">in</span> file_in:</span><br><span class="line">        <span class="number">1</span>/<span class="number">0</span></span><br><span class="line">        print(line)</span><br></pre></td></tr></table></figure>
+<p>同时，<code>contextlib</code> 库中的 <code>closing</code> 函数也可以将一个实现了 <code>close</code> 方法的资源对象转化为一个上下文管理器，这里不再赘述。</p>
+<hr>
+<p>0参考资料：</p>
+<ol>
+<li><a href="https://zhuanlan.zhihu.com/p/59070490" target="_blank" rel="noopener">深入理解 Python 中的上下文管理器</a></li>
+<li><a href="https://blog.csdn.net/qq_41359051/article/details/83514844" target="_blank" rel="noopener">Python上下文管理器实现的三种方法</a></li>
+<li><a href="https://www.jianshu.com/p/d53449f9e7e0" target="_blank" rel="noopener">python黑魔法—上下文管理器（contextor）</a></li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Python-Flask/" rel="tag"># Python, Flask</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/06/26/Functor/" rel="next" title="从 Functor 到 Applicative 再到 Monad">
+                <i class="fa fa-chevron-left"></i> 从 Functor 到 Applicative 再到 Monad
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/09/10/Python 与 Flask 中的上下文（下）/" rel="prev" title="Python 与 Flask 中的上下文（下）">
+                Python 与 Flask 中的上下文（下） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Han</p>
+              <p class="site-description motion-element" itemprop="description">Stay Hungry, Stay Foolish</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">标签</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Hangary" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:HangaryLiu@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Python-与-Flask-中的上下文（上）"><span class="nav-number">1.</span> <span class="nav-text">Python 与 Flask 中的上下文（上）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是-上下文-Context"><span class="nav-number">1.1.</span> <span class="nav-text">什么是 上下文 Context</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Python-中的上下文管理器"><span class="nav-number">1.2.</span> <span class="nav-text">Python 中的上下文管理器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#关键词-with"><span class="nav-number">1.2.1.</span> <span class="nav-text">关键词 with</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#上下文管理器类-Context-Manager-Class"><span class="nav-number">1.2.2.</span> <span class="nav-text">上下文管理器类 (Context Manager Class)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#contextmanager-装饰器"><span class="nav-number">1.2.3.</span> <span class="nav-text">@contextmanager 装饰器</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Han</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
