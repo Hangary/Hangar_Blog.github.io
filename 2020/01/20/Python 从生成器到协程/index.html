@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Python,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Python 从生成器到协程在开始之前，首先需要明白一个 Python 重要的概念：全局解释器锁 GIL， 即在同一时刻只能有一条线程正在运行。这一机制使得 Python 多线程程序并不能利用多核 CPU 的优势。所以说 Python 的多线程适用于 I/O 密集型程序，而非计算密集型程序。 但是，如果我们用多线程来处理  I/O 密集型程序，尽管可以避免阻塞，但却也会因为频繁切换线程而带来性能损">
+<meta name="keywords" content="Python">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python 从生成器到协程">
+<meta property="og:url" content="http://yoursite.com/2020/01/20/Python 从生成器到协程/index.html">
+<meta property="og:site_name" content="Hangary Blog">
+<meta property="og:description" content="Python 从生成器到协程在开始之前，首先需要明白一个 Python 重要的概念：全局解释器锁 GIL， 即在同一时刻只能有一条线程正在运行。这一机制使得 Python 多线程程序并不能利用多核 CPU 的优势。所以说 Python 的多线程适用于 I/O 密集型程序，而非计算密集型程序。 但是，如果我们用多线程来处理  I/O 密集型程序，尽管可以避免阻塞，但却也会因为频繁切换线程而带来性能损">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-04-05T08:08:48.734Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python 从生成器到协程">
+<meta name="twitter:description" content="Python 从生成器到协程在开始之前，首先需要明白一个 Python 重要的概念：全局解释器锁 GIL， 即在同一时刻只能有一条线程正在运行。这一机制使得 Python 多线程程序并不能利用多核 CPU 的优势。所以说 Python 的多线程适用于 I/O 密集型程序，而非计算密集型程序。 但是，如果我们用多线程来处理  I/O 密集型程序，尽管可以避免阻塞，但却也会因为频繁切换线程而带来性能损">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":true,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/01/20/Python 从生成器到协程/">
+
+
+
+
+
+  <title>Python 从生成器到协程 | Hangary Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hangary Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/20/Python 从生成器到协程/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Han">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hangary Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Python 从生成器到协程</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-20T00:00:00-06:00">
+                2020-01-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Python-从生成器到协程"><a href="#Python-从生成器到协程" class="headerlink" title="Python 从生成器到协程"></a>Python 从生成器到协程</h1><p>在开始之前，首先需要明白一个 Python 重要的概念：<strong>全局解释器锁 GIL</strong>， 即在同一时刻只能有一条线程正在运行。这一机制使得 Python 多线程程序并不能利用多核 CPU 的优势。所以说 Python 的多线程适用于 I/O 密集型程序，而非计算密集型程序。</p>
+<p>但是，如果我们用多线程来处理  I/O 密集型程序，尽管可以避免阻塞，但却也会因为频繁切换线程而带来性能损耗，为了解决这一问题，<strong>协程 Coroutine</strong> 就出现了。</p>
+<blockquote>
+<p>协程是一种用户态的轻量级线程，即协程是由用户程序自己控制调度的。</p>
+<p>协程适合 I/O 密集型的任务并发，而不适合 CPU 密集型的任务并发。</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="生成器-Generator"><a href="#生成器-Generator" class="headerlink" title="生成器 Generator"></a>生成器 Generator</h2><p>生成器的概念十分抽象，我个人对于生成器作用的理解有两个：</p>
+<ol>
+<li>生成器可以用于<strong>实现生产者-消费者模型</strong>：生成器是生产者，而调用者是消费者。生成器每生产一个资源，就返回外层逻辑进行消费，待消费者执行完毕后，立即切换回生产者继续生产。从而可以避免线程切换损耗、死锁等等问题。</li>
+<li>生成器可以用于<strong>切分函数逻辑</strong>：当生成器函数执行到一些需要等待的 I/O 任务时，生成器函数可以发出请求后，通过 <code>yield</code> 暂停，使得外层逻辑可以继续执行。从而可以避免阻塞。</li>
+</ol>
+<h3 id="生成器函数-Generator-Function"><a href="#生成器函数-Generator-Function" class="headerlink" title="生成器函数 Generator Function"></a>生成器函数 Generator Function</h3><p><strong>生成器函数 generator function</strong> 是一类特殊通过关键词 <code>yield</code> 返回值的函数，其和普通函数不同的地方在于其控制流：</p>
+<ol>
+<li>生成器函数被调用后，<u>其函数体内的代码并不会执行</u>，而是返回一个 <strong>生成器对象 generator</strong>。当返回的生成器被调用时（一般是通过 <code>next</code>），相应的生成器函数中的代码才会执行。</li>
+<li>生成器函数使用 <code>yield</code> 返回值之后，<u>这个函数并不会被结束，而是会保存当前的函数状态</u>，等待下一次调用。<ul>
+<li><code>yield</code> 右侧的表达式会被严格求值，然后返回给调用者。</li>
+<li><code>yield</code> 左侧被赋值的变量，会在下一次被调用时赋值，如果没有值传入，会默认赋值为 <code>None</code>。</li>
+</ul>
+</li>
+<li>当被再一次调用时，生成器函数会从暂停的 <code>yield</code> 语句处开始运行，直至执行下一个 <code>yield</code> 语句。</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">example_generator</span><span class="params">()</span>:</span></span><br><span class="line">  a = <span class="number">0</span></span><br><span class="line">  print(<span class="string">"Generator is initilized"</span>)</span><br><span class="line">  <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">    b = <span class="keyword">yield</span> a</span><br><span class="line">    print(<span class="string">"Fetch input:"</span>, b)</span><br><span class="line">    a += <span class="number">1</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">gen = example_generator()				<span class="comment"># gen is a generator, no value is produced</span></span><br><span class="line">print(<span class="string">"Begin calling next on generator:"</span>)</span><br><span class="line">print(next(gen))	<span class="comment"># 0</span></span><br><span class="line">print(next(gen))	<span class="comment"># 1</span></span><br><span class="line">print(next(gen))	<span class="comment"># 2</span></span><br></pre></td></tr></table></figure>
+<p>这个程序的结果会是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Begin calling next on generator:</span><br><span class="line">Generator is initilized</span><br><span class="line">0</span><br><span class="line">Fetch input: None</span><br><span class="line">1</span><br><span class="line">Fetch input: None</span><br><span class="line">2</span><br></pre></td></tr></table></figure>
+<h3 id="生成器表达式-Generator-Comprehension"><a href="#生成器表达式-Generator-Comprehension" class="headerlink" title="生成器表达式 Generator Comprehension"></a>生成器表达式 Generator Comprehension</h3><p>我们可以使用类似于 <strong>列表表达式 list comprehension</strong> 的方法来生成一个生成器对象：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>(x*<span class="number">2</span> <span class="keyword">for</span> x <span class="keyword">in</span> range(<span class="number">10</span>))</span><br><span class="line">&lt;type <span class="string">'generator'</span>&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="使用生成器"><a href="#使用生成器" class="headerlink" title="使用生成器"></a>使用生成器</h3><p>要使用一个生成器，我们有如下三种方法：</p>
+<ol>
+<li><code>for</code> 循环：使用生成器的最简单方法是通过 <code>for</code> 循环遍历，当遍历到 <code>StopIteration</code> 时就会停止。</li>
+<li><code>next</code> 方法：如上面的代码示例，我们也可以手动调用 <code>next</code> 方法，它会不断返回下一个数据，直到没有数据时抛出 <code>StopIteration</code> 错误。<ul>
+<li>注：<code>gen.next()</code> 在 python3 中已经被改为了 <code>next(gen)</code> 或者 <code>gen.__next__()</code>。</li>
+</ul>
+</li>
+<li><code>send</code> 方法：不仅会像 <code>next</code> 一样执行到下一个 <code>yield</code>，还会传递值到 <code>yield</code> 的左侧。</li>
+</ol>
+<p>以下三种方法是等价的：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">next(gen)</span><br><span class="line">gen.__next__()</span><br><span class="line">gen.send(<span class="keyword">None</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="生成器实现的协程"><a href="#生成器实现的协程" class="headerlink" title="生成器实现的协程"></a>生成器实现的协程</h2><p>生成器最重要的特性之一，就是它可以在运行中途停止，转换到外层逻辑，随后再继续运行。通过这个特性，我们可以利用 <code>yield</code> 来 <em><u>分割</u></em> 任务。</p>
+<p>举一个需要发出 HTTP Request 并处理 Response 的函数作为例子，其函数逻辑应该如下：</p>
+<ol>
+<li>初始化，随后发出一个 HTTP Request；</li>
+<li>使用 <code>yield</code> 暂停；</li>
+<li>外层逻辑收到 HTTP Response 后，通过 <code>send</code> 返回该 Response 并让该函数继续运行；</li>
+<li>处理 Response 并结束。</li>
+</ol>
+<p>代码大致会是这样：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">HTTP_logic</span><span class="params">(request_target)</span>:</span></span><br><span class="line">  send_request(request_target)</span><br><span class="line">  response = <span class="keyword">yield</span></span><br><span class="line">  cope_with(response)</span><br></pre></td></tr></table></figure>
+<p>以上其实就是一个协程的案例，我们通过 <code>yield</code> 实现了不同逻辑间的切换，并能跳过阻塞中的 I/O 逻辑而去执行其他逻辑。</p>
+<p>不过实际应用的协程中要远远比这个复杂，其中最重要的两个逻辑在于：</p>
+<ol>
+<li>事件框架：如何记录并维护所有正在运行中的协程？</li>
+<li>唤醒逻辑：什么时候应该唤醒一个暂停中的协程？</li>
+</ol>
+<p>这些内容更为复杂，这里就不再阐述，感兴趣的同学建议看一下这篇博文中给出的例子，非常精简且利于理解：”<a href="https://liam.page/2017/06/30/generator-coroutine-in-python-basic-topics/" target="_blank" rel="noopener">Python 中的黑暗角落（二）：生成器协程的调度问题</a>“。</p>
+<hr>
+<p>参考资料：</p>
+<ol>
+<li><a href="https://liam.page/2017/06/30/understanding-yield-in-python/" target="_blank" rel="noopener">Python 中的黑暗角落</a>：一篇对于 python 生成器与协程机制阐述地很清楚的文章，强烈建议阅读。</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Python/" rel="tag"># Python</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/09/10/Python 与 Flask 中的上下文（下）/" rel="next" title="Python 与 Flask 中的上下文（下）">
+                <i class="fa fa-chevron-left"></i> Python 与 Flask 中的上下文（下）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.jpg" alt="Han">
+            
+              <p class="site-author-name" itemprop="name">Han</p>
+              <p class="site-description motion-element" itemprop="description">Stay Hungry, Stay Foolish</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/Hangary" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:HangaryLiu@gmail.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Python-从生成器到协程"><span class="nav-number">1.</span> <span class="nav-text">Python 从生成器到协程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#生成器-Generator"><span class="nav-number">1.1.</span> <span class="nav-text">生成器 Generator</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#生成器函数-Generator-Function"><span class="nav-number">1.1.1.</span> <span class="nav-text">生成器函数 Generator Function</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#生成器表达式-Generator-Comprehension"><span class="nav-number">1.1.2.</span> <span class="nav-text">生成器表达式 Generator Comprehension</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用生成器"><span class="nav-number">1.1.3.</span> <span class="nav-text">使用生成器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#生成器实现的协程"><span class="nav-number">1.2.</span> <span class="nav-text">生成器实现的协程</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Han</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
