@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Hangary Blog">
 <meta property="og:description" content="从 Functor 到 Applicative 再到 Monad 本文是我在学习 Haskell 期间的一点感悟，不一定正确，但希望可以帮助到一些也在学习 Haskell 的小伙伴们。  大多数 Monad 尝试解决的是 副作用 (side effect) 的问题。 在命令式编程中，大多数函数表现的并不像是数学中的函数，因为它们除了接收输入、返回输出之外，还有可能读写全局变量、进行 IO （如 p">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-04-05T00:50:42.111Z">
+<meta property="og:updated_time" content="2020-04-05T01:10:26.518Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="从 Functor 到 Applicative 再到 Monad">
 <meta name="twitter:description" content="从 Functor 到 Applicative 再到 Monad 本文是我在学习 Haskell 期间的一点感悟，不一定正确，但希望可以帮助到一些也在学习 Haskell 的小伙伴们。  大多数 Monad 尝试解决的是 副作用 (side effect) 的问题。 在命令式编程中，大多数函数表现的并不像是数学中的函数，因为它们除了接收输入、返回输出之外，还有可能读写全局变量、进行 IO （如 p">
@@ -325,6 +325,7 @@
 </blockquote>
 <p>大多数 Monad 尝试解决的是 <strong>副作用 (side effect)</strong> 的问题。</p>
 <p>在命令式编程中，大多数函数表现的并不像是数学中的函数，因为它们除了接收输入、返回输出之外，还有可能读写全局变量、进行 IO （如 <code>print</code>）或者修改指针中的值。<br>但是，在纯函数式编程中，一个函数只能接收输入、返回输出。</p>
+<a id="more"></a>
 <p>举个最简单的例子，在 python 中，我们可以使用 <code>print</code> 进行 debugging:</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span><span class="params">(x: float)</span> -&gt; float:</span></span><br><span class="line">    print(<span class="string">"f was called."</span>)</span><br><span class="line">    <span class="keyword">return</span> x * <span class="number">2</span></span><br><span class="line">    </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">g</span><span class="params">(x: float)</span> -&gt; float:</span></span><br><span class="line">    print(<span class="string">"g was called."</span>)</span><br><span class="line">    <span class="keyword">return</span> x - <span class="number">2</span></span><br></pre></td></tr></table></figure>
 <p>这就是一个具有副作用的函数，它们不仅返回了计算后的值，还进行了 <code>print</code>。</p>

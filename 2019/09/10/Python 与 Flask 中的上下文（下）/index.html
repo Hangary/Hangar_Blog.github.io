@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="Python 与 Flask 中的上下文（下）最近在学习 Flask，其中 上下文 Context 是 Flask 中非常重要的一个概念，而这个命名也来源于 Python 的 上下文管理器 Context Manager 机制。所以这里稍微整理一下相关的一些概念。 上下文管理器与多线程、异步编程上下文管理器最常用的用法是与多线程/异步编程相配合，因为在这种情况下，我们常常需要切换运行的上下文。 F">
+<meta name="description" content="Python 与 Flask 中的上下文（下） 最近在学习 Flask，其中 上下文 Context 是 Flask 中非常重要的一个概念，而这个命名也来源于 Python 的 上下文管理器 Context Manager 机制。所以这里稍微整理一下相关的一些概念。  上下文管理器与多线程、异步编程上下文管理器最常用的用法是与多线程/异步编程相配合，因为在这种情况下，我们常常需要切换运行的上下文。">
 <meta name="keywords" content="Python,Flask">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Python 与 Flask 中的上下文（下）">
 <meta property="og:url" content="http://yoursite.com/2019/09/10/Python 与 Flask 中的上下文（下）/index.html">
 <meta property="og:site_name" content="Hangary Blog">
-<meta property="og:description" content="Python 与 Flask 中的上下文（下）最近在学习 Flask，其中 上下文 Context 是 Flask 中非常重要的一个概念，而这个命名也来源于 Python 的 上下文管理器 Context Manager 机制。所以这里稍微整理一下相关的一些概念。 上下文管理器与多线程、异步编程上下文管理器最常用的用法是与多线程/异步编程相配合，因为在这种情况下，我们常常需要切换运行的上下文。 F">
+<meta property="og:description" content="Python 与 Flask 中的上下文（下） 最近在学习 Flask，其中 上下文 Context 是 Flask 中非常重要的一个概念，而这个命名也来源于 Python 的 上下文管理器 Context Manager 机制。所以这里稍微整理一下相关的一些概念。  上下文管理器与多线程、异步编程上下文管理器最常用的用法是与多线程/异步编程相配合，因为在这种情况下，我们常常需要切换运行的上下文。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-04-05T00:55:50.419Z">
+<meta property="og:updated_time" content="2020-04-05T01:10:47.623Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Python 与 Flask 中的上下文（下）">
-<meta name="twitter:description" content="Python 与 Flask 中的上下文（下）最近在学习 Flask，其中 上下文 Context 是 Flask 中非常重要的一个概念，而这个命名也来源于 Python 的 上下文管理器 Context Manager 机制。所以这里稍微整理一下相关的一些概念。 上下文管理器与多线程、异步编程上下文管理器最常用的用法是与多线程/异步编程相配合，因为在这种情况下，我们常常需要切换运行的上下文。 F">
+<meta name="twitter:description" content="Python 与 Flask 中的上下文（下） 最近在学习 Flask，其中 上下文 Context 是 Flask 中非常重要的一个概念，而这个命名也来源于 Python 的 上下文管理器 Context Manager 机制。所以这里稍微整理一下相关的一些概念。  上下文管理器与多线程、异步编程上下文管理器最常用的用法是与多线程/异步编程相配合，因为在这种情况下，我们常常需要切换运行的上下文。">
 
 
 
@@ -320,7 +320,9 @@
       
 
       
-        <h1 id="Python-与-Flask-中的上下文（下）"><a href="#Python-与-Flask-中的上下文（下）" class="headerlink" title="Python 与 Flask 中的上下文（下）"></a>Python 与 Flask 中的上下文（下）</h1><p>最近在学习 <code>Flask</code>，其中 <strong>上下文 Context</strong> 是 <code>Flask</code> 中非常重要的一个概念，而这个命名也来源于 <code>Python</code> 的 <strong>上下文管理器 Context Manager</strong> 机制。所以这里稍微整理一下相关的一些概念。</p>
+        <h1 id="Python-与-Flask-中的上下文（下）"><a href="#Python-与-Flask-中的上下文（下）" class="headerlink" title="Python 与 Flask 中的上下文（下）"></a>Python 与 Flask 中的上下文（下）</h1><blockquote>
+<p>最近在学习 <code>Flask</code>，其中 <strong>上下文 Context</strong> 是 <code>Flask</code> 中非常重要的一个概念，而这个命名也来源于 <code>Python</code> 的 <strong>上下文管理器 Context Manager</strong> 机制。所以这里稍微整理一下相关的一些概念。</p>
+</blockquote>
 <h3 id="上下文管理器与多线程、异步编程"><a href="#上下文管理器与多线程、异步编程" class="headerlink" title="上下文管理器与多线程、异步编程"></a>上下文管理器与多线程、异步编程</h3><p>上下文管理器最常用的用法是与多线程/异步编程相配合，因为在这种情况下，我们常常需要切换运行的上下文。</p>
 <p>Flask 中的两类上下文：</p>
 <ol>
