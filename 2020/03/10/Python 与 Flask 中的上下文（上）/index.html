@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="Python 与 Flask 中的上下文（上） 最近在学习 Flask，其中 上下文 Context 是 Flask 中非常重要的一个概念，而这个命名也来源于 Python 的 上下文管理器 Context Manager 机制。所以这里稍微整理一下相关的一些概念。  什么是 上下文 Context在计算机术语中，上下文 Context 是一个很广泛的术语，在不同领域往往有不同的含义。我自己的理解">
+<meta name="description" content="Python 与 Flask 中的上下文（上） 最近在学习 Flask，其中 上下文 Context 是 Flask 中非常重要的一个概念，而这个命名也来源于 Python 的 上下文管理器 Context Manager 机制。所以这里稍微整理一下相关的概念。  什么是 上下文 Context在计算机术语中，上下文 Context 是一个很广泛的术语，在不同领域往往有不同的含义。我自己的理解是，">
 <meta name="keywords" content="Python,Flask">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Python 与 Flask 中的上下文（上）">
-<meta property="og:url" content="http://yoursite.com/2019/09/05/Python 与 Flask 中的上下文（上）/index.html">
+<meta property="og:url" content="http://yoursite.com/2020/03/10/Python 与 Flask 中的上下文（上）/index.html">
 <meta property="og:site_name" content="Hangary Blog">
-<meta property="og:description" content="Python 与 Flask 中的上下文（上） 最近在学习 Flask，其中 上下文 Context 是 Flask 中非常重要的一个概念，而这个命名也来源于 Python 的 上下文管理器 Context Manager 机制。所以这里稍微整理一下相关的一些概念。  什么是 上下文 Context在计算机术语中，上下文 Context 是一个很广泛的术语，在不同领域往往有不同的含义。我自己的理解">
+<meta property="og:description" content="Python 与 Flask 中的上下文（上） 最近在学习 Flask，其中 上下文 Context 是 Flask 中非常重要的一个概念，而这个命名也来源于 Python 的 上下文管理器 Context Manager 机制。所以这里稍微整理一下相关的概念。  什么是 上下文 Context在计算机术语中，上下文 Context 是一个很广泛的术语，在不同领域往往有不同的含义。我自己的理解是，">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-04-05T20:13:56.494Z">
+<meta property="og:updated_time" content="2020-04-07T00:11:11.176Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Python 与 Flask 中的上下文（上）">
-<meta name="twitter:description" content="Python 与 Flask 中的上下文（上） 最近在学习 Flask，其中 上下文 Context 是 Flask 中非常重要的一个概念，而这个命名也来源于 Python 的 上下文管理器 Context Manager 机制。所以这里稍微整理一下相关的一些概念。  什么是 上下文 Context在计算机术语中，上下文 Context 是一个很广泛的术语，在不同领域往往有不同的含义。我自己的理解">
+<meta name="twitter:description" content="Python 与 Flask 中的上下文（上） 最近在学习 Flask，其中 上下文 Context 是 Flask 中非常重要的一个概念，而这个命名也来源于 Python 的 上下文管理器 Context Manager 机制。所以这里稍微整理一下相关的概念。  什么是 上下文 Context在计算机术语中，上下文 Context 是一个很广泛的术语，在不同领域往往有不同的含义。我自己的理解是，">
 
 
 
@@ -120,7 +120,7 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/09/05/Python 与 Flask 中的上下文（上）/">
+  <link rel="canonical" href="http://yoursite.com/2020/03/10/Python 与 Flask 中的上下文（上）/">
 
 
 
@@ -253,7 +253,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/05/Python 与 Flask 中的上下文（上）/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/10/Python 与 Flask 中的上下文（上）/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Han">
@@ -282,8 +282,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-09-05T00:00:00-05:00">
-                2019-09-05
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-10T00:00:00-05:00">
+                2020-03-10
               </time>
             
 
@@ -321,9 +321,9 @@
 
       
         <h1 id="Python-与-Flask-中的上下文（上）"><a href="#Python-与-Flask-中的上下文（上）" class="headerlink" title="Python 与 Flask 中的上下文（上）"></a>Python 与 Flask 中的上下文（上）</h1><blockquote>
-<p>最近在学习 <code>Flask</code>，其中 <strong>上下文 Context</strong> 是 <code>Flask</code> 中非常重要的一个概念，而这个命名也来源于 <code>Python</code> 的 <strong>上下文管理器 Context Manager</strong> 机制。所以这里稍微整理一下相关的一些概念。</p>
+<p>最近在学习 <code>Flask</code>，其中 <strong>上下文 Context</strong> 是 <code>Flask</code> 中非常重要的一个概念，而这个命名也来源于 <code>Python</code> 的 <strong>上下文管理器 Context Manager</strong> 机制。所以这里稍微整理一下相关的概念。</p>
 </blockquote>
-<h2 id="什么是-上下文-Context"><a href="#什么是-上下文-Context" class="headerlink" title="什么是 上下文 Context"></a>什么是 上下文 Context</h2><p>在计算机术语中，<strong>上下文 Context</strong> 是一个很广泛的术语，在不同领域往往有不同的含义。我自己的理解是，在编程中，上下文可以理解为 <strong>环境 environment</strong>。</p>
+<h2 id="什么是-上下文-Context"><a href="#什么是-上下文-Context" class="headerlink" title="什么是 上下文 Context"></a>什么是 上下文 Context</h2><p>在计算机术语中，<strong>上下文 Context</strong> 是一个很广泛的术语，在不同领域往往有不同的含义。我自己的理解是，在编程中，上下文可以理解为一个操作执行时需要的特定的执行<strong>环境 environment</strong>。</p>
 <a id="more"></a>
 <p><code>Flask</code> 中的视图函数往往需要一些对象来运行，如 <code>request</code>, <code>session</code>, <code>current_app</code> 等。我们有两个选择：</p>
 <ol>
@@ -365,10 +365,20 @@
 </ul>
 </li>
 </ol>
-<h3 id="contextmanager-装饰器"><a href="#contextmanager-装饰器" class="headerlink" title="@contextmanager 装饰器"></a><code>@contextmanager</code> 装饰器</h3><p>上面提到的上下文管理器方法，往往是用于给一个资源类增加管理上下文的功能。如果我们只需要 <code>__enter__</code> 和 <code>__exit__</code> 这两个方法，写一个类太过繁杂了。我们可以通过 <code>Python</code> 提供的 <code>@contextmanager</code>  装饰器，来将一个 <strong>生成器 generator</strong> 转化为上下文管理器。</p>
+<p>实现了这两个方法的类也被称为实现了 <strong>上下文管理器协议</strong> 。</p>
+<h3 id="基于生成器的实现：-contextmanager-装饰器"><a href="#基于生成器的实现：-contextmanager-装饰器" class="headerlink" title="基于生成器的实现：@contextmanager 装饰器"></a>基于生成器的实现：<code>@contextmanager</code> 装饰器</h3><p>上面提到的上下文管理器方法，往往是用于给一个资源类增加管理上下文的功能。如果我们只需要 <code>__enter__</code> 和 <code>__exit__</code> 这两个方法，写一个类太过繁杂了。我们可以通过 <code>Python</code> 提供的 <code>@contextmanager</code>  装饰器，来<u>将一个 <strong>生成器 generator</strong> 转化为上下文管理器</u>。</p>
 <p>下面就是一个案例：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> contextlib <span class="keyword">import</span> contextmanager</span><br><span class="line"></span><br><span class="line"><span class="comment"># 不处理 Excpetion</span></span><br><span class="line"><span class="meta">@contextmanager</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">open_func_without_excp</span><span class="params">(file_name)</span>:</span></span><br><span class="line">    <span class="comment"># __enter__</span></span><br><span class="line">    file_handler = open(file_name, <span class="string">'r'</span>)</span><br><span class="line">		<span class="comment"># yield 资源对象</span></span><br><span class="line">    <span class="keyword">yield</span> file_handler</span><br><span class="line">    <span class="comment"># __exit__</span></span><br><span class="line">    file_handler.close()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 处理 Excpetion</span></span><br><span class="line"><span class="meta">@contextmanager</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">open_func</span><span class="params">(file_name)</span>:</span></span><br><span class="line">    <span class="comment"># __enter__</span></span><br><span class="line">    file_handler = open(file_name, <span class="string">'r'</span>)</span><br><span class="line">	</span><br><span class="line">    <span class="keyword">try</span>: 	</span><br><span class="line">        <span class="keyword">yield</span> file_handler	<span class="comment"># yield 资源对象</span></span><br><span class="line">    <span class="comment"># exception handler</span></span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> exc:</span><br><span class="line">        print(<span class="string">'the exception was thrown'</span>)</span><br><span class="line">    <span class="comment"># __exit__</span></span><br><span class="line">    file_handler.close()</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> open_func(<span class="string">'test.txt'</span>) <span class="keyword">as</span> file_in:</span><br><span class="line">    <span class="keyword">for</span> line <span class="keyword">in</span> file_in:</span><br><span class="line">        <span class="number">1</span>/<span class="number">0</span></span><br><span class="line">        print(line)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> contextlib <span class="keyword">import</span> contextmanager</span><br><span class="line"></span><br><span class="line"><span class="comment"># 不处理 Excpetion</span></span><br><span class="line"><span class="meta">@contextmanager</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">open_func_without_excp</span><span class="params">(file_name)</span>:</span></span><br><span class="line">    <span class="comment"># __enter__</span></span><br><span class="line">    file_handler = open(file_name, <span class="string">'r'</span>)</span><br><span class="line">        <span class="comment"># yield 资源对象</span></span><br><span class="line">    <span class="keyword">yield</span> file_handler</span><br><span class="line">    <span class="comment"># __exit__</span></span><br><span class="line">    file_handler.close()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 处理 Excpetion</span></span><br><span class="line"><span class="meta">@contextmanager</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">open_func</span><span class="params">(file_name)</span>:</span></span><br><span class="line">    <span class="comment"># __enter__</span></span><br><span class="line">    file_handler = open(file_name, <span class="string">'r'</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">try</span>: 	</span><br><span class="line">        <span class="keyword">yield</span> file_handler	<span class="comment"># yield 资源对象</span></span><br><span class="line">    <span class="comment"># exception handler</span></span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> exc:</span><br><span class="line">        print(<span class="string">'the exception was thrown'</span>)</span><br><span class="line">    <span class="comment"># __exit__</span></span><br><span class="line">    file_handler.close()</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> open_func(<span class="string">'test.txt'</span>) <span class="keyword">as</span> file_in:</span><br><span class="line">    <span class="keyword">for</span> line <span class="keyword">in</span> file_in:</span><br><span class="line">        <span class="number">1</span>/<span class="number">0</span></span><br><span class="line">        print(line)</span><br></pre></td></tr></table></figure>
 <p>同时，<code>contextlib</code> 库中的 <code>closing</code> 函数也可以将一个实现了 <code>close</code> 方法的资源对象转化为一个上下文管理器，这里不再赘述。</p>
+<h3 id="异步上下文管理器"><a href="#异步上下文管理器" class="headerlink" title="异步上下文管理器"></a>异步上下文管理器</h3><blockquote>
+<p>IN PROGRESS</p>
+</blockquote>
+<h2 id="多线程中的上下文"><a href="#多线程中的上下文" class="headerlink" title="多线程中的上下文"></a>多线程中的上下文</h2><blockquote>
+<p>IN PROGRESS</p>
+</blockquote>
+<p><strong>线程上下文 threading context</strong> 指的是一个线程运行时所需要的环境与当前状态。当我们切换线程时，我们就需要进行 <strong>上下文切换 context switching</strong> ，这也是多线程性能损耗的主要原因。</p>
+<h3 id="在-with-语句中使用锁、条件和信号量"><a href="#在-with-语句中使用锁、条件和信号量" class="headerlink" title="在 with 语句中使用锁、条件和信号量"></a>在 <code>with</code> 语句中使用锁、条件和信号量</h3><p>Python 的 <strong>锁 lock</strong> 对象都支持上下文管理协议，因此我们可以使用 <code>with</code> 语句中去调用它们：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> some_lock:</span><br><span class="line">    <span class="comment"># do something...</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 相当于</span></span><br><span class="line"></span><br><span class="line">some_lock.acquire()</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="comment"># do something...</span></span><br><span class="line"><span class="keyword">finally</span>:</span><br><span class="line">    some_lock.release()</span><br></pre></td></tr></table></figure>
 <hr>
 <p><strong>参考资料</strong>：</p>
 <ol>
@@ -408,8 +418,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/06/26/从 Functor 到 Applicative 再到 Monad/" rel="next" title="从 Functor 到 Applicative 再到 Monad">
-                <i class="fa fa-chevron-left"></i> 从 Functor 到 Applicative 再到 Monad
+              <a href="/2020/02/01/Python 装饰器梳理/" rel="next" title="Python 装饰器梳理">
+                <i class="fa fa-chevron-left"></i> Python 装饰器梳理
               </a>
             
           </div>
@@ -418,7 +428,7 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2019/09/10/Python 与 Flask 中的上下文（下）/" rel="prev" title="Python 与 Flask 中的上下文（下）">
+              <a href="/2020/03/25/Python 与 Flask 中的上下文（下）/" rel="prev" title="Python 与 Flask 中的上下文（下）">
                 Python 与 Flask 中的上下文（下） <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -499,7 +509,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -561,7 +571,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Python-与-Flask-中的上下文（上）"><span class="nav-number">1.</span> <span class="nav-text">Python 与 Flask 中的上下文（上）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是-上下文-Context"><span class="nav-number">1.1.</span> <span class="nav-text">什么是 上下文 Context</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Python-中的上下文管理器"><span class="nav-number">1.2.</span> <span class="nav-text">Python 中的上下文管理器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#关键词-with"><span class="nav-number">1.2.1.</span> <span class="nav-text">关键词 with</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#上下文管理器类-Context-Manager-Class"><span class="nav-number">1.2.2.</span> <span class="nav-text">上下文管理器类 (Context Manager Class)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#contextmanager-装饰器"><span class="nav-number">1.2.3.</span> <span class="nav-text">@contextmanager 装饰器</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Python-与-Flask-中的上下文（上）"><span class="nav-number">1.</span> <span class="nav-text">Python 与 Flask 中的上下文（上）</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#什么是-上下文-Context"><span class="nav-number">1.1.</span> <span class="nav-text">什么是 上下文 Context</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Python-中的上下文管理器"><span class="nav-number">1.2.</span> <span class="nav-text">Python 中的上下文管理器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#关键词-with"><span class="nav-number">1.2.1.</span> <span class="nav-text">关键词 with</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#上下文管理器类-Context-Manager-Class"><span class="nav-number">1.2.2.</span> <span class="nav-text">上下文管理器类 (Context Manager Class)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于生成器的实现：-contextmanager-装饰器"><span class="nav-number">1.2.3.</span> <span class="nav-text">基于生成器的实现：@contextmanager 装饰器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#异步上下文管理器"><span class="nav-number">1.2.4.</span> <span class="nav-text">异步上下文管理器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多线程中的上下文"><span class="nav-number">1.3.</span> <span class="nav-text">多线程中的上下文</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#在-with-语句中使用锁、条件和信号量"><span class="nav-number">1.3.1.</span> <span class="nav-text">在 with 语句中使用锁、条件和信号量</span></a></li></ol></li></ol></li></ol></div>
             
 
           </div>
